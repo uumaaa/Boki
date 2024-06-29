@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How it works</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+            crossorigin="anonymous"></script>
+    <style>
+        .card {
+            transition: background 0.3s, color 0.3s;
+            color: #bebebe !important;
+        }
+
+        .card:hover {
+            background: white !important;
+            color: black !important;
+        }
+
+        .card:hover .card-title, .card:hover .card-text {
+            color: black !important;
+        }
+        .card:hover .card-img-top{
+            filter:brightness(1);
+        }
+        .card-img-top{
+            filter: brightness(0.25);
+        }
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 12px;
+            height: 12px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background-color: white;
+            border-radius: 5px;
+            border: 6px solid transparent; /* Adds space around the thumb for rounded effect */
+            background-clip: padding-box; /* Prevents the border from affecting the thumb size */
+        }
+
+        /* Ensuring compatibility with Firefox */
+        html {
+            scrollbar-width: thin;
+            scrollbar-color: white transparent;
+        }
+    </style>
+</head>
+<body style="background: black">
+<nav class="navbar navbar-dark" style="background: black">
+    <div class="container-fluid">
+        <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
+                aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="offcanvas offcanvas-start navbar-dark text-bg-dark" tabindex="-1" id="offcanvasNavbar"
+             aria-labelledby="offcanvasNavbarLabel">
+            <div class="offcanvas-header" style="background: black">
+                <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Menu</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"
+                        aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body" style="background: black">
+                <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="../index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">How it works</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                           aria-expanded="false">
+                            Books
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-dark">
+                            <li><a class="dropdown-item" href="generate_book.html">Generate book</a></li>
+                            <li><a class="dropdown-item" href="generated_books.html">Generated books</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <a class="navbar-brand mb-0 h1" href="#">BoKi</a>
+    </div>
+</nav>
+<div class="container w-100 d-flex flex-column justify-items-center pb-4">
+
+    <h2 class="text-white mx-auto">How BoKI works</h2>
+    <div class="row p-3">
+        <div class="col">
+            <div class="card text-bg-dark w-100">
+                <img src="../assets/images/fine-tunning.webp" class="card-img-top" alt="..." height="250">
+                <div class="card-body">
+                    <h5 class="card-title">Fine Tuning</h5>
+                    <p class="card-text text-justify">Our model is fine-tuned with the BookCorpus dataset, a comprehensive collection comprising 74 million sentences retrieved from books. This extensive dataset enables the model to understand and generate high-quality literary content.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card text-bg-dark w-100">
+                <img src="../assets/images/neural-network.jpeg" class="card-img-top" alt="..." height="250">
+                <div class="card-body">
+                    <h5 class="card-title">Embedded Model</h5>
+                    <p class="card-text text-justify">The model is embedded in our server infrastructure, ensuring all computational tasks are handled server-side. This design choice offloads computational demands from the client, providing a seamless user experience.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card text-bg-dark w-100">
+                <img src="../assets/images/tree-modeling.webp" class="card-img-top" alt="..." height="250">
+                <div class="card-body">
+                    <h5 class="card-title">Node Modeling</h5>
+                    <p class="card-text text-justify">Node modeling allows for a detailed breakdown and analysis of book structures. This approach helps in understanding the hierarchical and semantic relationships within the text, aiding in more coherent and structured content creation.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row p-3">
+        <div class="col">
+            <div class="card text-bg-dark w-100">
+                <img src="../assets/images/personalization.png" class="card-img-top" alt="..." height="250">
+                <div class="card-body">
+                    <h5 class="card-title">Personalization per Node</h5>
+                    <p class="card-text text-justify">Our platform offers personalization at the node level, allowing users to tailor specific sections or modules of their books. This feature ensures that each part of the book can be customized to meet unique preferences and requirements.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card text-bg-dark w-100">
+                <img src="../assets/images/rewrite.jpeg" class="card-img-top" alt="..." height="250">
+                <div class="card-body">
+                    <h5 class="card-title">Re-writing Book</h5>
+                    <p class="card-text text-justify">BoKI supports re-writing and editing capabilities, enabling users to refine and enhance their literary works. This functionality is particularly useful for iterative content development and continuous improvement of book drafts.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BoKi</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+            crossorigin="anonymous"></script>
+</head>
+<body style="overflow: hidden">
+
+<nav class="navbar navbar-dark" style="background: black">
+    <div class="container-fluid">
+        <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
+                aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="offcanvas offcanvas-start navbar-dark text-bg-dark" tabindex="-1" id="offcanvasNavbar"
+             aria-labelledby="offcanvasNavbarLabel">
+            <div class="offcanvas-header" style="background: black">
+                <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Menu</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"
+                        aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body" style="background: black">
+                <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="./pages/how_it_works.html">How it works</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                           aria-expanded="false">
+                            Books
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-dark">
+                            <li><a class="dropdown-item" href="pages/generate_book.html">Generate book</a></li>
+                            <li><a class="dropdown-item" href="pages/generated_books.html">Generated books</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <a class="navbar-brand mb-0 h1" href="#">BoKi</a>
+    </div>
+</nav>
+
+<div
+        style="background-image: url('assets/images/background.webp');width: 100vw;height:92.8vh;filter: brightness(0.15);">
+</div>
+<div class="text-white" style="
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        ">
+    <div class="w-100">
+        <h1 class="text-center" id="title"></h1>
+        <br>
+        <br>
+        <p class="text-justify" style="width: 75vw" id="paragraph1"></p>
+        <p class="text-justify" id="paragraph2"></p>
+        <br>
+        <div class="text-center w-100">
+            <a href="pages/generate_book.html" type="button" class="btn btn-outline-light p-2 w-50 d-none"
+               style="font-size: 22px" id="button-container">
+
+            </a>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    var loading = true
+    document.addEventListener('click', function () {
+        const elements = [
+            {id: 'title', text: "BoKI: Book Knowledge Integration"},
+            {
+                id: 'paragraph1',
+                text: "BoKI is a sophisticated platform designed to enable users to create customized literary content through advanced text generation technology. Leveraging the capabilities of OpenAI's GPT-2 pre-trained model, BoKI is finely tuned using the BookCorpus dataset to deeply understand and replicate the semantic structures of books. This allows for the generation of high-quality, contextually coherent literary content."
+            },
+            {
+                id: 'paragraph2',
+                text: "BoKI offers users the unique ability to create books in customizable modules, enhancing their understanding and engagement with the content. This modular approach allows for flexibility in content creation, enabling users to tailor their literary works according to their specific needs and preferences. Whether for educational purposes, creative writing, or professional publishing, BoKI provides a versatile and powerful tool for generating literary content that is both meaningful and contextually rich."
+            },
+            {id: 'button-container', text: "Generate your book"}]
+        if (loading) {
+            loading = false;
+            for (let i = 0; i < elements.length; i++) {
+                const element = elements[i]
+                const node = document.getElementById(element.id)
+                node.innerText = ''
+                node.innerText = element.text
+                if (i === elements.length - 1) {
+                    node.classList.remove('d-none')
+                }
+            }
+        }
+    })
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const elements = [
+            {id: 'title', text: "BoKI: Book Knowledge Integration"},
+            {
+                id: 'paragraph1',
+                text: "BoKI is a sophisticated platform designed to enable users to create customized literary content through advanced text generation technology. Leveraging the capabilities of OpenAI's GPT-2 pre-trained model, BoKI is finely tuned using the BookCorpus dataset to deeply understand and replicate the semantic structures of books. This allows for the generation of high-quality, contextually coherent literary content."
+            },
+            {
+                id: 'paragraph2',
+                text: "BoKI offers users the unique ability to create books in customizable modules, enhancing their understanding and engagement with the content. This modular approach allows for flexibility in content creation, enabling users to tailor their literary works according to their specific needs and preferences. Whether for educational purposes, creative writing, or professional publishing, BoKI provides a versatile and powerful tool for generating literary content that is both meaningful and contextually rich."
+            },
+            {id: 'button-container', text: "Generate your book"}
+        ];
+
+        let charIndex = 0;
+        let elementIndex = 0;
+
+        function typeCharacter() {
+            if (!loading) {
+                return
+            }
+            if (elementIndex < elements.length) {
+                const element = elements[elementIndex];
+                const elementNode = document.getElementById(element.id);
+
+                if (charIndex <= element.text.length) {
+                    elementNode.textContent = element.text.slice(0, charIndex);
+                    charIndex++;
+                    setTimeout(typeCharacter, 25);
+                } else {
+                    charIndex = 0;
+                    elementIndex++;
+                    if (element.id === 'button-container') {
+                        elementNode.classList.remove('d-none');
+                    }
+                    setTimeout(typeCharacter, 500);
+                }
+            }
+        }
+
+        typeCharacter();
+    });
+
+</script>
+</html>

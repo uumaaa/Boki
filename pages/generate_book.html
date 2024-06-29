@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Generate book</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+            crossorigin="anonymous"></script>
+    <style>
+        ::-webkit-scrollbar {
+            width: 12px;
+            height: 12px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background-color: white;
+            border-radius: 5px;
+            border: 6px solid transparent; /* Adds space around the thumb for rounded effect */
+            background-clip: padding-box; /* Prevents the border from affecting the thumb size */
+        }
+
+        /* Ensuring compatibility with Firefox */
+        html {
+            scrollbar-width: thin;
+            scrollbar-color: white transparent;
+        }
+    </style>
+</head>
+<body style="background-color: black">
+
+<nav class="navbar navbar-dark" style="background: black">
+    <div class="container-fluid">
+        <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
+                aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="offcanvas offcanvas-start navbar-dark text-bg-dark" tabindex="-1" id="offcanvasNavbar"
+             aria-labelledby="offcanvasNavbarLabel">
+            <div class="offcanvas-header" style="background: black">
+                <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Menu</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"
+                        aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body" style="background: black">
+                <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="../index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="./how_it_works.html">How it works</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                           aria-expanded="false">
+                            Books
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-dark">
+                            <li><a class="dropdown-item active" href="#">Generate book</a></li>
+                            <li><a class="dropdown-item text-white" href="./generated_books.html">Generated books</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <a class="navbar-brand mb-0 h1" href="#">BoKi</a>
+    </div>
+</nav>
+<div class="pl-4 pr-4 w-100 d-flex flex-row justify-content-around">
+    <div class="container w-50 d-flex flex-column">
+        <h2 class="text-white mx-auto">Generate your own book</h2>
+        <div class="w-100 mb-3">
+            <label for="mainPlotInput" class="form-label text-white bold">Main plot</label>
+            <textarea class="form-control" id="mainPlotInput" rows="3"></textarea>
+        </div>
+        <button type="submit" class="btn btn-outline-light w-50 mx-auto" id="savePlotBtn">Save main plot</button>
+        <h3 class="text-white mx-auto mt-4">Characters:</h3>
+        <table class="table table-responsive table-hover rounded" id="charactersTable">
+            <thead>
+            <tr>
+                <th>Character</th>
+                <th>Description</th>
+                <th>Characteristics</th>
+            </tr>
+            </thead>
+            <tbody id="charactersTableBody"></tbody>
+        </table>
+        <div class="row d-flex flex-row justify-content-around">
+            <button type="button" class="btn btn-outline-light w-25" data-bs-toggle="modal"
+                    data-bs-target="#characterModal"
+                    data-bs-whatever="Add character">Add character
+            </button>
+            <button type="button" class="btn btn-outline-warning w-25">Generate book</button>
+        </div>
+        <div class="modal fade" id="characterModal" tabindex="-1" aria-labelledby="characterModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog text-bg-dark">
+                <div class="modal-content bg-dark">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="characterModalLabel">Add character</h1>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="mb-3">
+                                <label for="nameInput" class="col-form-label">Name:</label>
+                                <input type="text" class="form-control" id="nameInput">
+                            </div>
+                            <div class="mb-3">
+                                <label for="personalityInput" class="col-form-label">Personality description:</label>
+                                <textarea class="form-control" id="personalityInput"></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="physicalInput" class="col-form-label">Physical characteristics:</label>
+                                <textarea class="form-control" id="physicalInput"></textarea>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal" id="saveCharacterBtn">Save
+                            character
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <p class="text-white bold mt-4 mx-auto" style="font-weight: bolder">The generated book structure is as
+            follows</p>
+        <div class="container w-100 bg-dark rounded p-2 text-white" style="height: 200px" id="createdStructure">
+            <p id="node0" onclick="showInfo(this)">Chapter 1</p>
+            <p id="node1"> lorem </p>
+            <p id="node2"> lorem</p>
+            <p id="node3"> lorem</p>
+        </div>
+    </div>
+    <div class="container w-50 d-flex flex-column align-items-center">
+        <div class="container bg-dark rounded text-white" style="height: 84vh" id="nodeData">
+
+        </div>
+    </div>
+</div>
+
+</body>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const characters = []; // Array to store characters
+        let mainPlot = '';
+        const savePlotBtn = document.getElementById('savePlotBtn');
+        savePlotBtn.addEventListener('click', function () {
+            const plot = document.getElementById('mainPlotInput').value.trim()
+            if (plot === '') {
+                alert('Please fill the plot')
+                return
+            }
+            mainPlot = plot;
+            document.getElementById('mainPlotInput').value = ''
+            document.getElementById('mainPlotInput').placeholder = mainPlot
+        });
+
+        const saveCharacterBtn = document.getElementById('saveCharacterBtn');
+        saveCharacterBtn.addEventListener('click', function () {
+            const name = document.getElementById('nameInput').value.trim();
+            const personality = document.getElementById('personalityInput').value.trim();
+            const description = document.getElementById('physicalInput').value.trim();
+
+            // Validate input
+            if (name === '' || personality === '' || description === '') {
+                alert('Please fill in all fields.');
+                return;
+            }
+
+            // Create character object
+            const character = {
+                name: name,
+                personality: personality,
+                description: description
+            };
+
+            // Add character to characters list
+            characters.push(character);
+
+            // Clear form inputs
+            document.getElementById('nameInput').value = '';
+            document.getElementById('personalityInput').value = '';
+            document.getElementById('physicalInput').value = '';
+
+            // Update characters table display
+            displayCharacters();
+
+        });
+
+        function displayCharacters() {
+            const charactersTableBody = document.getElementById('charactersTableBody');
+            charactersTableBody.innerHTML = ''; // Clear previous table rows
+
+            characters.forEach((character, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                <td>${character.name}</td>
+                <td>${character.personality}</td>
+                <td>${character.description}</td>
+            `;
+                row.addEventListener('click', () => {
+                    // Remove character from array
+                    characters.splice(index, 1);
+                    // Update table display
+                    displayCharacters();
+                });
+                charactersTableBody.appendChild(row);
+            });
+        }
+    });
+
+    function showInfo(node) {
+        const nodeData = document.getElementById('nodeData');
+        nodeData.innerHTML = '';
+
+        const editButton = document.createElement('button');
+        editButton.classList.add('btn', 'btn-outline-light', 'mx-auto', 'w-50');
+        editButton.setAttribute('data-bs-toggle', 'modal');
+        editButton.setAttribute('data-bs-target', '#chapterModal');
+        editButton.innerText = "Edit chapter";
+
+        nodeData.innerText = node.innerText;
+        nodeData.appendChild(editButton);
+
+        const modalContent = `
+                <div class="modal fade" id="chapterModal" tabindex="-1" aria-labelledby="chapterModalLabel" aria-hidden="true">
+                    <div class="modal-dialog text-bg-dark">
+                        <div class="modal-content bg-dark">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="chapterModalLabel">Edit chapter</h1>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form>
+                                    <div class="mb-3">
+                                        <label for="personalityInput" class="col-form-label">Rewrite chapter with custom prompt:</label>
+                                        <textarea class="form-control" id="personalityInput" rows="6"></textarea>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="physicalInput" class="col-form-label">Generate additional info:</label>
+                                        <textarea class="form-control" id="physicalInput" rows="6"></textarea>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-light" data-bs-dismiss="modal" id="saveCharacterBtn">Save
+                                    character
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+        nodeData.innerHTML += modalContent;
+    }
+
+
+</script>
+</html>
