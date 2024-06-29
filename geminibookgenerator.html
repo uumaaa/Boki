@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Creator with Gemini 1.5 Pro</title>
+</head>
+<body>
+    <h1>Book Creator</h1>
+    <form id="bookForm">
+        <label for="mainPlot">Main Plot:</label><br>
+        <input type="text" id="mainPlot" name="mainPlot"><br><br>
+
+        <label for="characters">Characters (name:description, one per line):</label><br>
+        <textarea id="characters" name="characters" rows="10" cols="30"></textarea><br><br>
+
+        <label for="numChapters">Number of Chapters:</label><br>
+        <input type="number" id="numChapters" name="numChapters" value="5"><br><br>
+
+        <label for="maxLength">Max Length per Chapter:</label><br>
+        <input type="number" id="maxLength" name="maxLength" value="500"><br><br>
+
+        <input type="submit" value="Generate Book">
+    </form>
+
+    <h2>Generated Book</h2>
+    <div id="bookContent"></div>
+    <button id="exportButton" style="display: none;">Export Book</button>
+
+    <script type="importmap">
+      {
+        "imports": {
+          "@google/generative-ai": "https://esm.run/@google/generative-ai"
+        }
+      }
+    </script>
+    <script type="module">
+      import { GoogleGenerativeAI } from "@google/generative-ai";
+
+      const API_KEY = 'AIzaSyAiOLj5_MwoEHPW1tKhVxywozaxiOQGmJI';
+      const genAI = new GoogleGenerativeAI(API_KEY);
+      const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
+      let chapters = [];
+      let context = '';
+
+      document.getElementById('bookForm').addEventListener('submit', async function(event) {
+          event.preventDefault();
+          await generateBook();
+          document.getElementById('exportButton').style.display = 'block';
+      });
+
+      async function generateBook() {
+          const mainPlot = document.getElementById('mainPlot').value;
+          const charactersText = document.getElementById('characters').value;
+          const numChapters = parseInt(document.getElementById('numChapters').value);
+          const maxLength = parseInt(document.getElementById('maxLength').value);
+
+          const characters = charactersText.split('\n').map(line => {
+              const [name, description] = line.split(':');
+              return { name, description };
+          });
+
+          context = `Create chapters of a book about ${mainPlot} with the following characters:\n` + 
+                    characters.map(char => `${char.name}: ${char.description}`).join('\n') + '\n\n';
+
+          chapters = [];
+
+          for (let i = 0; i < numChapters; i++) {
+              const prompt = `${context}Generate a unique Chapter ${i + 1}:`;
+
+              try {
+                  const result = await model.generateContent(prompt, { max_length: maxLength });
+                  const response = await result.response;
+                  const chapter = await response.text();
+                  chapters.push({ number: i + 1, text: chapter.trim() });
+
+                  const summaryPrompt = `Summarize the most important part of Chapter ${i + 1}: ${chapter}`;
+                  const summaryResult = await model.generateContent(summaryPrompt, { max_length: 50 });
+                  const summaryResponse = await summaryResult.response;
+                  const importantPart = await summaryResponse.text();
+                  context += `\n\nChapter ${i + 1} summary: ${importantPart.trim()}`;
+              } catch (error) {
+                  console.error('Error generating content:', error);
+                  chapters.push({ number: i + 1, text: '[Content blocked due to safety reasons]' });
+              }
+          }
+
+          displayChapters();
+      }
+
+      function displayChapters() {
+          const bookContent = document.getElementById('bookContent');
+          bookContent.innerHTML = '';
+
+          chapters.forEach(chapter => {
+              const chapterDiv = document.createElement('div');
+              chapterDiv.id = `chapter-${chapter.number}`;
+              chapterDiv.innerHTML = `
+                  <h3>Chapter ${chapter.number}</h3>
+                  <textarea rows="10" cols="80">${chapter.text}</textarea>
+                  <button onclick="editChapter(${chapter.number})">Edit Chapter</button>
+                  <hr>
+              `;
+              bookContent.appendChild(chapterDiv);
+          });
+      }
+
+      window.editChapter = async function(chapterNumber) {
+          const chapterText = document.querySelector(`#chapter-${chapterNumber} textarea`).value;
+
+          // Update the chapter text in the chapters array
+          chapters = chapters.map(chapter =>
+              chapter.number === chapterNumber ? { ...chapter, text: chapterText } : chapter
+          );
+
+          // Update context with the new chapter text and regenerate subsequent chapters
+          context = chapters.slice(0, chapterNumber).map(chapter =>
+              `Chapter ${chapter.number}:\n${chapter.text}\n\n${'-'.repeat(60)}\n`
+          ).join('');
+
+          for (let i = chapterNumber; i < chapters.length; i++) {
+              const prompt = `${context}Generate a unique Chapter ${i + 1}:`;
+
+              try {
+                  const result = await model.generateContent(prompt, { max_length: maxLength });
+                  const response = await result.response;
+                  const chapter = await response.text();
+                  chapters[i] = { number: i + 1, text: chapter.trim() };
+
+                  const summaryPrompt = `Summarize the most important part of Chapter ${i + 1}: ${chapter}`;
+                  const summaryResult = await model.generateContent(summaryPrompt, { max_length: 50 });
+                  const summaryResponse = await summaryResult.response;
+                  const importantPart = await summaryResponse.text();
+                  context += `\n\nChapter ${i + 1} summary: ${importantPart.trim()}`;
+              } catch (error) {
+                  console.error('Error generating content:', error);
+                  chapters[i] = { number: i + 1, text: '[Content blocked due to safety reasons]' };
+              }
+          }
+
+          displayChapters();
+      }
+
+      document.getElementById('exportButton').addEventListener('click', function() {
+          const bookContent = chapters.map(chapter => `Chapter ${chapter.number}:\n${chapter.text}\n\n${'-'.repeat(60)}\n`).join('');
+          const blob = new Blob([bookContent], { type: 'text/plain' });
+          const link = document.createElement('a');
+          link.href = URL.createObjectURL(blob);
+          link.download = 'generated_book.txt';
+          link.click();
+      });
+    </script>
+</body>
+</html>
